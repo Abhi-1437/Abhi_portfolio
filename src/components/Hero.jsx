@@ -25,7 +25,7 @@ const Hero = ({ scrolled }) => {
               {/* Image Container */}
               <div className="relative">
                 <img 
-                  src="images/image.jpeg"
+                  src="images/profile.jpeg"
                   alt="Profile" 
                   className={`relative rounded-2xl w-80 h-96 object-cover border-2 border-neon-green/50 transform transition-all duration-700 ${imageLoaded ? 'scale-100' : 'scale-95'} group-hover:scale-105 shadow-2xl`}
                   onLoad={() => setImageLoaded(true)}

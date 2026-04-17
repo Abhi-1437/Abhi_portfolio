@@ -45,22 +45,17 @@ const Contact = () => {
     setFormStatus({ submitting: true, submitted: false, error: false, message: '' })
 
     try {
-      // Using Web3Forms - Free form submission service
-      // Get your access key from https://web3forms.com
+      const formPayload = new FormData()
+      formPayload.append('access_key', '9deff256-57eb-4120-9489-c467464c9969')
+      formPayload.append('name', formData.name)
+      formPayload.append('email', formData.email)
+      formPayload.append('message', formData.message)
+      formPayload.append('subject', `New Portfolio Contact from ${formData.name}`)
+      formPayload.append('from_name', 'Portfolio Contact Form')
+
       const response = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify({
-          access_key: 'YOUR_WEB3FORMS_ACCESS_KEY', // Replace with your Web3Forms access key
-          name: formData.name,
-          email: formData.email,
-          message: formData.message,
-          subject: `New Portfolio Contact from ${formData.name}`,
-          from_name: 'Portfolio Contact Form'
-        })
+        body: formPayload
       })
 
       const result = await response.json()
@@ -70,22 +65,20 @@ const Contact = () => {
           submitting: false,
           submitted: true,
           error: false,
-          message: 'Thank you! Your message has been sent successfully. I\'ll get back to you soon!'
+          message: 'Thank you! Your message has been sent successfully. I\'ll get back to you soon.'
         })
         setFormData({ name: '', email: '', message: '' })
-        setTimeout(() => {
-          setFormStatus({ submitting: false, submitted: false, error: false, message: '' })
-        }, 5000)
       } else {
-        throw new Error('Form submission failed')
+        throw new Error(result.message || 'Form submission failed')
       }
     } catch (error) {
       setFormStatus({
         submitting: false,
         submitted: false,
         error: true,
-        message: 'Oops! Something went wrong. Please try again or email me directly at kunigiriabhishek@gmail.com'
+        message: 'Oops! Something went wrong. Please try again or email me directly at kunigiriabhishek@gmail.com.'
       })
+    } finally {
       setTimeout(() => {
         setFormStatus({ submitting: false, submitted: false, error: false, message: '' })
       }, 5000)
